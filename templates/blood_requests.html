@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Blood Requests{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>📢 Active Blood Requests</h1>
+  <p>People urgently need your help — every drop counts</p>
+  {% if session.user_id %}
+  <a href="{{ url_for('create_request') }}" class="btn btn-primary">+ Post a Request</a>
+  {% endif %}
+</div>
+
+{% if requests %}
+<div class="requests-grid">
+  {% for r in requests %}
+  <div class="request-card urgency-border-{{ r.urgency|lower }}">
+    <div class="req-top">
+      <span class="req-blood bg-{{ r.blood_group.replace('+','pos').replace('-','neg') }}">{{ r.blood_group }}</span>
+      <span class="req-urgency urgency-{{ r.urgency|lower }}">{{ r.urgency }}</span>
+    </div>
+    <div class="req-body">
+      <h4>{{ r.hospital }}</h4>
+      <p>📍 {{ r.city }}, {{ r.state }}</p>
+      <p>🩸 Units needed: <strong>{{ r.units_needed }}</strong></p>
+      <p>👤 Requested by: {{ r.name }}</p>
+      {% if r.notes %}<p class="req-notes">{{ r.notes }}</p>{% endif %}
+      <p class="req-time">⏰ {{ r.created_at.strftime('%d %b %Y, %I:%M %p') }}</p>
+    </div>
+    <div class="req-footer">
+      <a href="tel:{{ r.phone }}" class="btn btn-primary btn-sm">📞 Contact Now</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">🎉</div>
+  <h3>No open requests right now</h3>
+  <p>That's great news! Register as a donor so you're ready when needed.</p>
+  <a href="{{ url_for('become_donor') }}" class="btn btn-primary">Become a Donor</a>
+</div>
+{% endif %}
+{% endblock %}

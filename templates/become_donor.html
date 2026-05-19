@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Donor Profile{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card wide-card">
+    <div class="auth-header">
+      <span class="auth-icon">🩸</span>
+      <h2>{% if existing %}Update{% else %}Become a{% endif %} Donor</h2>
+      <p>Your information helps recipients find you quickly</p>
+    </div>
+    <form method="POST" action="{{ url_for('become_donor') }}" class="auth-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Blood Group</label>
+          <select name="blood_group" required>
+            {% for bg in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}
+            <option value="{{ bg }}" {% if existing and existing.blood_group==bg %}selected{% endif %}>{{ bg }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" name="age" min="18" max="65" placeholder="18–65"
+                 value="{{ existing.age if existing else '' }}" required/>
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select name="gender" required>
+            {% for g in ['Male','Female','Other'] %}
+            <option value="{{ g }}" {% if existing and existing.gender==g %}selected{% endif %}>{{ g }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" name="city" placeholder="Your city"
+                 value="{{ existing.city if existing else '' }}" required/>
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" name="state" placeholder="Your state"
+                 value="{{ existing.state if existing else '' }}" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Last Donation Date (optional)</label>
+        <input type="date" name="last_donated"
+               value="{{ existing.last_donated if existing and existing.last_donated else '' }}"/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">
+        {% if existing %}Update Profile{% else %}Register as Donor{% endif %}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

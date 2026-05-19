@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Welcome, {{ session.user_name }} 👋</h1>
+  <p>Manage your donor profile and blood requests</p>
+</div>
+
+<div class="dashboard-grid">
+
+  <!-- Stats -->
+  <div class="dash-stats">
+    <div class="dash-stat-card red">
+      <span class="ds-num">{{ open_req }}</span>
+      <span class="ds-label">Open Requests</span>
+    </div>
+    <div class="dash-stat-card green">
+      <span class="ds-num">{{ avail_donors }}</span>
+      <span class="ds-label">Available Donors</span>
+    </div>
+  </div>
+
+  <!-- Donor Profile -->
+  <div class="dash-card">
+    <h3 class="dash-card-title">🩸 Your Donor Profile</h3>
+    {% if donor_profile %}
+      <div class="profile-info">
+        <div class="profile-badge bg-{{ donor_profile.blood_group.replace('+','pos').replace('-','neg') }}">
+          {{ donor_profile.blood_group }}
+        </div>
+        <div class="profile-details">
+          <p><strong>City:</strong> {{ donor_profile.city }}, {{ donor_profile.state }}</p>
+          <p><strong>Age:</strong> {{ donor_profile.age }} | <strong>Gender:</strong> {{ donor_profile.gender }}</p>
+          <p><strong>Status:</strong>
+            {% if donor_profile.is_available %}
+              <span class="badge badge-green">Available</span>
+            {% else %}
+              <span class="badge badge-red">Unavailable</span>
+            {% endif %}
+          </p>
+          {% if donor_profile.last_donated %}
+          <p><strong>Last Donated:</strong> {{ donor_profile.last_donated }}</p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="dash-actions">
+        <a href="{{ url_for('toggle_availability') }}" class="btn btn-sm btn-outline">
+          {% if donor_profile.is_available %}Mark Unavailable{% else %}Mark Available{% endif %}
+        </a>
+        <a href="{{ url_for('become_donor') }}" class="btn btn-sm btn-outline">Edit Profile</a>
+      </div>
+    {% else %}
+      <p class="empty-msg">You haven't registered as a donor yet.</p>
+      <a href="{{ url_for('become_donor') }}" class="btn btn-primary">Become a Donor</a>
+    {% endif %}
+  </div>
+
+  <!-- My Requests -->
+  <div class="dash-card">
+    <h3 class="dash-card-title">📋 My Blood Requests</h3>
+    {% if my_requests %}
+      <table class="dash-table">
+        <thead><tr><th>Blood</th><th>Hospital</th><th>Urgency</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+        {% for r in my_requests %}
+          <tr>
+            <td><span class="badge-blood">{{ r.blood_group }}</span></td>
+            <td>{{ r.hospital }}</td>
+            <td><span class="urgency-{{ r.urgency|lower }}">{{ r.urgency }}</span></td>
+            <td><span class="badge badge-{{ 'green' if r.status=='fulfilled' else 'red' if r.status=='cancelled' else 'blue' }}">{{ r.status }}</span></td>
+            <td>
+              {% if r.status == 'open' %}
+              <a href="{{ url_for('close_request', req_id=r.id) }}" class="btn btn-xs btn-outline"
+                 onclick="return confirm('Mark this request as fulfilled?')">✔ Done</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="empty-msg">No requests posted yet.</p>
+    {% endif %}
+    <a href="{{ url_for('create_request') }}" class="btn btn-primary mt-1">+ New Request</a>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="dash-card">
+    <h3 class="dash-card-title">⚡ Quick Actions</h3>
+    <div class="quick-links">
+      <a href="{{ url_for('find_donors') }}" class="quick-link">🔍 Find Donors</a>
+      <a href="{{ url_for('blood_requests') }}" class="quick-link">📢 View All Requests</a>
+      <a href="{{ url_for('create_request') }}" class="quick-link">🆕 Post Request</a>
+      <a href="{{ url_for('become_donor') }}" class="quick-link">❤️ Donor Profile</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

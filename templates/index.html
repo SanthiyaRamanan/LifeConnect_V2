@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-badge">Save Lives Today</span>
+    <h1 class="hero-title">One Donation.<br><em>Three Lives Saved.</em></h1>
+    <p class="hero-sub">LifeConnect bridges the gap between blood donors and those in urgent need. Find donors, post requests — fast and free.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('find_donors') }}" class="btn btn-primary">Find a Donor</a>
+      <a href="{{ url_for('create_request') }}" class="btn btn-outline">Post a Request</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="drop-anim">
+      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 5 C50 5 10 60 10 85 A40 40 0 0 0 90 85 C90 60 50 5 50 5Z" fill="url(#dropGrad)"/>
+        <defs>
+          <linearGradient id="dropGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff4d6d"/>
+            <stop offset="100%" style="stop-color:#c9184a"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num" data-target="{{ donors_count }}">0</span>
+    <span class="stat-label">Active Donors</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="{{ requests_count }}">0</span>
+    <span class="stat-label">Open Requests</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <span class="stat-num" data-target="{{ users_count }}">0</span>
+    <span class="stat-label">Members</span>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section">
+  <h2 class="section-title">How It Works</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-icon">📝</div>
+      <h3>Register</h3>
+      <p>Create your free account in under 2 minutes. No paperwork needed.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-icon">🩸</div>
+      <h3>Donate or Request</h3>
+      <p>Register as a donor or post an urgent blood request instantly.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-icon">🤝</div>
+      <h3>Connect</h3>
+      <p>Donors and recipients connect directly via phone. Simple and effective.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-icon">❤️</div>
+      <h3>Save Lives</h3>
+      <p>Your single donation can save up to three lives. Be a hero today.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BLOOD TYPES -->
+<section class="section blood-section">
+  <h2 class="section-title">Blood Type Compatibility</h2>
+  <div class="blood-grid">
+    {% for bg in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}
+    <div class="blood-badge blood-{{ bg.replace('+','pos').replace('-','neg') }}">{{ bg }}</div>
+    {% endfor %}
+  </div>
+  <p class="blood-note">O- is the universal donor · AB+ is the universal recipient</p>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2>Ready to make a difference?</h2>
+    <p>Join thousands of donors who are saving lives every day.</p>
+    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Join LifeConnect Free</a>
+  </div>
+</section>
+
+{% endblock %}
