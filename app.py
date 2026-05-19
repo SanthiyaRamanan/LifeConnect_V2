@@ -10,7 +10,7 @@ app.secret_key = 'lifeconnect_secret_key_2024'
 # MySQL Configuration - Update these with your MySQL Workbench credentials
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Santhiya@05'  # Change this
+app.config['MYSQL_PASSWORD'] = 'Your Password'  # Change this
 app.config['MYSQL_DB'] = 'lifeconnect'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
